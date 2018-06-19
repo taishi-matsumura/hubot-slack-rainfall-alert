@@ -5,13 +5,13 @@
   "dependencies": {
     "bluebird": "^3.0.5",
     "cron": "^1.0.9",
-    "google-url": "0.0.4",
     "moment-timezone": "^0.4.0",
     "hubot-slack": "^4.0.2",
     "hubot-redis-brain": "0.0.3",
     "quiche": "0.0.10"
   },
   "main": "index.coffee",
+  "private": true,
   "repository": {
     "type": "git",
     "url": "git+https://github.com/takashyx/hubot-slack-rainfall-alert.git"

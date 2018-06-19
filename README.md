@@ -35,15 +35,14 @@ $ cat external-scripts.json
     + [YOLP(地図):気象情報API - Yahoo!デベロッパーネットワーク](http://developer.yahoo.co.jp/webapi/map/openlocalplatform/v1/weather.html)
     + [YOLP(地図):Yahoo!スタティックマップAPI - Yahoo!デベロッパーネットワーク](http://developer.yahoo.co.jp/webapi/map/openlocalplatform/v1/static.html#exp_weather)
     + [YOLP(地図):Yahoo!ジオコーダAPI - Yahoo!デベロッパーネットワーク](http://developer.yahoo.co.jp/webapi/map/openlocalplatform/v1/geocoder.html)
-- Google API key for ShortURL [(https://console.developers.google.com/project)](https://console.developers.google.com/project)
-    + [URL Shortener  |  Google Developers](https://developers.google.com/url-shortener/)
+- Bitly API key for ShortURL [(https://bitly.com)](https://bitly.com)
 
 ### Required parameters
 
 Envs
 ```bash
 export HUBOT_RAINFALL_ALERT_YAHOO_APP_ID=[Your yahoo app id here]
-export HUBOT_RAINFALL_ALERT_GOOGLE_API_KEY=[Your google api key here]
+export HUBOT_RAINFALL_ALERT_BITLY_API_KEY=[Your bitly api key here]
 export HUBOT_RAINFALL_ALERT_CHANNEL_ID=[Channel ID (not name!!!) to post notifications ex: "C035AFECB" -> get id from https://api.slack.com/methods/channels.list/test ]
 export HUBOT_RAINFALL_ALERT_THRESH=[Notification threshold for rainfall(mm/h). ex: "0.5"]
 export HUBOT_RAINFALL_ALERT_CRONTIME=[Describe how often you want to check the rainfall in cron format. ex: "0 */10 0,9-23 * * *"]
@@ -56,4 +55,5 @@ export HUBOT_RAINFALL_ALERT_IMAGE_HEIGHT=[Image height for the map. Recommend: "
 ```
 
 ## Special thanks
-This script uses Yahoo APIs/Google APIs.
+This script uses Yahoo APIs/Bitly APIs.
+

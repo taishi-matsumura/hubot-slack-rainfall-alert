@@ -9,7 +9,6 @@
 
 CronJob = require("cron").CronJob
 Quiche = require("quiche")
-GoogleUrl = require("google-url")
 Promise = require("bluebird")
 
 rainfall_param = {
@@ -60,13 +59,13 @@ module.exports = (robot) ->
 
   robot.hear /^rainfall$/i, (msg) ->
     url = getRainfallRadarUrl rainfall_param.lat, rainfall_param.lon, rainfall_param.nonzoom, rainfall_param.map_image_x, rainfall_param.map_image_y
-    getShortURL_promised(url).then (res) ->
+    getShortURL_promised(robot, url).then (res) ->
       msg.send res
     return
 
   robot.hear /^rainfall zoom$/i, (msg) ->
     url = getRainfallRadarUrl rainfall_param.lat, rainfall_param.lon, rainfall_param.zoom, rainfall_param.map_image_x, rainfall_param.map_image_y
-    getShortURL_promised(url).then (res) ->
+    getShortURL_promised(robot, url).then (res) ->
       msg.send res
     return
 
@@ -92,7 +91,7 @@ module.exports = (robot) ->
         lon = coordinates[0]
         lat = coordinates[1]
         url = getRainfallRadarUrl lat, lon, zoom, rainfall_param.map_image_x, rainfall_param.map_image_y
-        getShortURL_promised(url).then((res) ->
+        getShortURL_promised(robot, url).then((res) ->
           msg.send res)
       )
 
@@ -209,7 +208,7 @@ rainfallCheckShowResult = (robot, rainfall, notify_nodiff, width) ->
     rainfall_image_url = (getRainfallRadarUrl rainfallcheck_param.lat_for_map, rainfallcheck_param.lon_for_map, rainfallcheck_param.zoom, rainfallcheck_param.map_image_x, rainfallcheck_param.map_image_y)  + d_str
 
     urls = [bar_image_url, radar_url, rainfall_image_url]
-    Promise.all( urls.map((url) -> getShortURL_promised(url))).then((results) ->
+    Promise.all( urls.map((url) -> getShortURL_promised(robot, url))).then((results) ->
 
       bar_image_url = results[0]
       radar_url = results[1]
@@ -282,11 +281,17 @@ getLALFromAreaString_promised = (msg, area) ->
         return
 
 
-getShortURL_promised = (url) ->
+getShortURL_promised = (robot, url) ->
   return new Promise (resolve, reject) ->
-    googleUrl = new GoogleUrl({key: process.env.HUBOT_RAINFALL_ALERT_GOOGLE_API_KEY})
-    googleUrl.shorten url, (err, shortUrl) ->
-      if err
-        reject err
-      else
-        resolve shortUrl
+    robot.http('https://api-ssl.bitly.com/v3/shorten')
+      .query({
+        access_token: process.env.HUBOT_RAINFALL_ALERT_BITLY_API_KEY
+        longUrl: url
+      })
+      .get() (err, res, body) ->
+        if err
+          reject err
+        else
+          obj = JSON.parse(body)
+          resolve obj.data.url
+        return
